@@ -7,8 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "LayoutHandler.h"
+#import "LayoutDef.h"
 
+@class LayoutHandler;
 @class LayoutDragEvent;
 
 extern const float LayoutPlacedInitializeProportion;
@@ -16,16 +17,18 @@ extern const float LayoutPlacedInitializeProportion;
 @interface LayoutView : NSView <LayoutDragSenderDelegate, LayoutDragResponserDelegate>
 {
     NSUInteger _id;
-    
-    BOOL _resizing;
-    NSPoint _mouseDownRelativeLocation;
-    LayoutRelativeDirection _resizeDirection;
+    LayoutHandler* _handler;
 }
 
-@property (nonatomic, assign) LayoutHandler* handler;
+@property (nonatomic, readonly) NSUInteger layoutIdentifier;
+@property (nonatomic, readonly) LayoutHandler* handler;
 
 -(instancetype)initWithHandler:(LayoutHandler*)handler;
 
 -(NSSize)layoutMinSize;
+-(LayoutRelativeDirection)checkLayoutPlacedDirection:(NSPoint)location outspread:(CGFloat)outspread;
+-(NSRect)getPlacedFrame:(LayoutRelativeDirection)direction;
+-(BOOL)checkDragSenderIsSelf:(LayoutDragEvent*)event;
+-(NSView*)getPlacedDisplayView;
 
 @end
